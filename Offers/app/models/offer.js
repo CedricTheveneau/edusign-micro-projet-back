@@ -33,12 +33,10 @@ const offerSchema = new mongoose.Schema({
     trim: true,
     lowercase: false,
   },
-  content: {
-    type: String,
-    required: [true, "The content field is required"],
-    unique: [true, "You are trying to copy an already existing offer"],
-    trim: true,
-    lowercase: false,
+  skills: {
+    type: Array,
+    required: [true, "The skills field is required"],
+    default: [],
   },
   slug: {
     type: String,

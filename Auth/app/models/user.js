@@ -41,6 +41,11 @@ const userSchema = new mongoose.Schema({
         "Please fill in a valid password, which must contain at least an uppercase letter, a lowercase letter, a number, a special character and be at least 8 characters long",
     },
   },
+  skills: {
+    type: Array,
+    required: [true, "The skills field is required"],
+    default: [],
+  },
   role: {
     type: String,
     enum: ["user", "admin"],
