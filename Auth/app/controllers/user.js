@@ -72,7 +72,7 @@ exports.confirmEmail = async (req, res) => {
     <h1 style="text-align:center;color:#141414;">C'est officiel, vous êtes un membre de la plateforme Edusign !</h1>
     <h2 style="text-align:center;color:#141414;">Maintenant que votre compte est activé, vous pouvez bénéficier de tout ce que l'application a à vous offrir.</h2><br/><br/>
     <p style="text-align:justify;color:#141414;">Pour vous connecter et découvrir tout notre contenu, vous n'avez qu'à cliquer juste en dessous ! </p>
-    <a style="color:#B0ABED;text-decoration:underline;font-weight:bold;font-style:italic;font-size:18px;text-transform:uppercase;" href="https://localhost:3000/login">Je me connecte !</a><br/><br/><br/>
+    <a style="color:#B0ABED;text-decoration:underline;font-weight:bold;font-style:italic;font-size:18px;text-transform:uppercase;" href="http://localhost:3000/login">Je me connecte !</a><br/><br/><br/>
     <h2>À très bientôt !</h2><br/><br/>
     <p style="font-weight:bold;font-style:italic;text-align:right;display:block;">L'équipe Edusign</p>
   `;
