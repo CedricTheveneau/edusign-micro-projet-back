@@ -3,13 +3,12 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { sendConfirmationEmail, sendContactEmail } = require("../utils/emailUtils");
 const crypto = require("crypto");
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // Création de compte
 exports.register = async (req, res) => {
   try {
     // Récupération des éléments dans le corps de requête
-    const { username, email, password } = req.body;
+    const { username, email, password, skills } = req.body;
 
     // Génération d'un token de confirmation unique
     const confirmationToken = crypto.randomBytes(32).toString("hex");
@@ -19,6 +18,7 @@ exports.register = async (req, res) => {
       username,
       email,
       password,
+      skills,
       confirmationToken, // ajout du token
       emailConfirmed: false, // email non confirmé par défaut
     });
@@ -109,7 +109,7 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
     const token = jwt.sign(
-      { id: user._id, role: user.role },
+      { id: user._id, role: user.role, skills: user.skills },
       process.env.TOKEN_SECRET,
       {
         expiresIn: Number(process.env.TOKEN_EXPIRATION),
@@ -150,6 +150,7 @@ exports.update = async (req, res) => {
       username,
       email,
       password,
+      skills,
       lastConnected,
       appliedOffers,
       savedOffers,
@@ -163,6 +164,7 @@ exports.update = async (req, res) => {
         username,
         email,
         password,
+        skills,
         lastConnected,
         appliedOffers,
         savedOffers,

@@ -6,10 +6,12 @@ module.exports = (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
     const userId = decodedToken.id;
     const userRole = decodedToken.role;
+    const userSkills = decodedToken.skills;
 
     req.auth = {
       userId,
-      userRole
+      userRole,
+      userSkills
     };
     next();
   } catch (err) {
