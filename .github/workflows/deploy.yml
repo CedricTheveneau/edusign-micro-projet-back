@@ -1,0 +1,42 @@
+name: Update Parent Repo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-parent:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          repository: 'CedricTheveneau/Voyage_Stoique'
+          submodules: true
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.PARENT_REPO_SSH_KEY }}
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "CedricTheveneau"
+          git config --global user.email "theveneaucedric@gmail.com"
+
+      - name: Pull latest changes from parent repo
+        run: |
+          git pull origin main --rebase
+
+      - name: Update submodules to the latest version
+        run: |
+          git submodule update --remote
+
+      - name: Push changes to parent repo
+        run: |
+          git remote set-url origin git@github.com:CedricTheveneau/Voyage_Stoique.git
+          git add .
+          git commit -m "Update back submodule to latest version" || echo "Nothing to commit"
+          git push origin main

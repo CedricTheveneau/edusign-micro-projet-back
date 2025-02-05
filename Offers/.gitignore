@@ -1,0 +1,6 @@
+# Prevents node modules from getting loaded to the repo
+node_modules
+
+# Prevents environnement variables from getting uploaded to the repo
+.env
+env-config.json
