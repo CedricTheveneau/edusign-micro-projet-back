@@ -15,7 +15,7 @@ const sendConfirmationEmail = async (userEmail, subject, htmlContent) => {
 
   // Configuration de l'email
   const mailOptions = {
-    from: `"Cédric de Voyage Stoïque" <${process.env.EMAIL_USER}>`,
+    from: `"Cédric de Edusign" <${process.env.EMAIL_USER}>`,
     to: userEmail,
     subject, // Utilisation de la variable `subject`
     html: htmlContent, // Utilisation de la variable `htmlContent`
@@ -39,7 +39,7 @@ const sendContactEmail = async (userEmail, subject, htmlContent) => {
 
   // Configuration de l'email
   const mailOptions = {
-    from: `"Voyage Stoïque" <${process.env.EMAIL_USER}>`,
+    from: `"Edusign" <${process.env.EMAIL_USER}>`,
     to: `${process.env.EMAIL_USER}`,
     replyTo: userEmail,   
     subject, // Utilisation de la variable `subject`
