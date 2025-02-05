@@ -34,14 +34,14 @@ cron.schedule('00 08 * * 1', async () => {
       <p>Voici les dernières nouvelles de notre site.</p>
       <p>Profitez de nos nouveaux articles et plus encore.</p>
       <p>À bientôt !</p><br/><br/>
-      <p>L'équipe Voyage Stoïque</p>
+      <p>L'équipe Edusign</p>
     `;
 
     // Construire les options de l'email
     const mailOptions = {
-      from: `"Cédric de Voyage Stoïque" <${process.env.EMAIL_USER}>`,
+      from: `"Cédric de Edusign" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: 'Voyage Stoïque | Votre newsletter hebdomadaire',
+      subject: 'Edusign | Votre newsletter hebdomadaire',
       html: newsletterContent,
     };
 
@@ -79,14 +79,14 @@ cron.schedule('00 10 * * *', async () => {
      <p>Ce mail vous est adressé pour vous rappeler que votre compte n'a toujours pas été activé.</p><br/><br/>
      <p>Si vous n'activez pas votre email dans les 5 prochains jours, votre compte et les données associées seront supprimées de notre base de données.</p>
       <p>À bientôt !</p><br/><br/>
-      <p>L'équipe Voyage Stoïque</p>
+      <p>L'équipe Edusign</p>
     `;
 
     // Construire les options de l'email
     const mailOptions = {
-      from: `"Cédric de Voyage Stoïque" <${process.env.EMAIL_USER}>`,
+      from: `"Cédric de Edusign" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: 'Voyage Stoïque | Votre compte n\'est toujours pas activé',
+      subject: 'Edusign | Votre compte n\'est toujours pas activé',
       html: newsletterContent,
     };
 
@@ -121,18 +121,18 @@ cron.schedule('00 10 * * *', async () => {
     // Générer un contenu de newsletter personnalisé
     const newsletterContent = `
       <h1>Bonjour ${username} !</h1>
-     <p>Ceci est la seconde (et dernière) relance pour activer votre compte Voyage Stoïque. En effet, au bout d'une semaine, si un utilisateur n'a pas activé son compte, nous le supprimons avec toutes les informations associées de nos bases de données.</p><br/><br/>
+     <p>Ceci est la seconde (et dernière) relance pour activer votre compte Edusign. En effet, au bout d'une semaine, si un utilisateur n'a pas activé son compte, nous le supprimons avec toutes les informations associées de nos bases de données.</p><br/><br/>
      <p>Pas de panique, cela dit. Même si votre compte finit par être clôturé, vous pourrez toujours, à tout moment, créer un nouveau compte, en cliquant sur le lien ci-dessous :</p><br/<<br/><br/>
      <a style="color:#B0ABED;text-decoration:underline;font-weight:bold;font-style:italic;font-size:18px;text-transform:uppercase;" href="https://voyage-stoique.com/signup">Je crée un nouveau compte !</a><br/><br/><br/>
       <p>À bientôt !</p><br/><br/>
-      <p>L'équipe Voyage Stoïque</p>
+      <p>L'équipe Edusign</p>
     `;
 
     // Construire les options de l'email
     const mailOptions = {
-      from: `"Cédric de Voyage Stoïque" <${process.env.EMAIL_USER}>`,
+      from: `"Cédric de Edusign" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: 'Voyage Stoïque | Plus que 24h pour activer votre compte',
+      subject: 'Edusign | Plus que 24h pour activer votre compte',
       html: newsletterContent,
     };
 
@@ -171,14 +171,14 @@ cron.schedule('00 10 * * *', async () => {
      <p>Cependant, vous pouvez toujours, à tout moment, créer un nouveau compte, en cliquant sur le lien ci-dessous :</p><br/<<br/><br/>
      <a style="color:#B0ABED;text-decoration:underline;font-weight:bold;font-style:italic;font-size:18px;text-transform:uppercase;" href="https://voyage-stoique.com/signup">Je crée un nouveau compte !</a><br/><br/><br/>
       <p>À bientôt !</p><br/><br/>
-      <p>L'équipe Voyage Stoïque</p>
+      <p>L'équipe Edusign</p>
     `;
 
     // Construire les options de l'email
     const mailOptions = {
-      from: `"Cédric de Voyage Stoïque" <${process.env.EMAIL_USER}>`,
+      from: `"Cédric de Edusign" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: 'Voyage Stoïque | Suppression de votre compte',
+      subject: 'Edusign | Suppression de votre compte',
       html: newsletterContent,
     };
 
