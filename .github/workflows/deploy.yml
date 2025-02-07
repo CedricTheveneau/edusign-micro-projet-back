@@ -26,11 +26,12 @@ jobs:
           git config --global user.name "CedricTheveneau"
           git config --global user.email "theveneaucedric@gmail.com"
 
-      - name: Run tests in Auth micro-service
+      - name: Run tests in Auth submodule
         run: |
-          cd ./Auth
+          cd ./back/Auth
           npm install
-          npm run test -- --maxWorkers=2
+          npm install jest --save-dev
+          npm run test
         continue-on-error: false
 
       - name: Pull latest changes from parent repo
