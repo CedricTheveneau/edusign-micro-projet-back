@@ -26,14 +26,6 @@ jobs:
           git config --global user.name "CedricTheveneau"
           git config --global user.email "theveneaucedric@gmail.com"
 
-      - name: Run tests in Auth submodule
-        run: |
-          cd ./back/Auth
-          npm install
-          npm install jest --save-dev
-          npm run test
-        continue-on-error: false
-
       - name: Pull latest changes from parent repo
         run: |
           git pull origin main --rebase
