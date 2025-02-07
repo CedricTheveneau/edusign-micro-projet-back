@@ -1,34 +1,28 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { sendConfirmationEmail, sendContactEmail } = require("../utils/emailUtils");
+const { sendConfirmationEmail } = require("../utils/emailUtils");
 const crypto = require("crypto");
 
-// Création de compte
 exports.register = async (req, res) => {
   try {
-    // Récupération des éléments dans le corps de requête
     const { username, email, password, skills } = req.body;
 
-    // Génération d'un token de confirmation unique
     const confirmationToken = crypto.randomBytes(32).toString("hex");
 
-    // Création d'un nouvel utilisateur à partir des informations transmises dans la requête et ajout d'informations supplémentaires 
     const user = new User({
       username,
       email,
       password,
       skills,
-      confirmationToken, // ajout du token
-      emailConfirmed: false, // email non confirmé par défaut
+      confirmationToken,
+      emailConfirmed: false,
     });
-    // Sauvegarde de l'utilisateur en base de donnée
     await user.save();
 
-    // Envoi de l'email de confirmation de création de compte
     const confirmationUrl = `${process.env.FRONTEND_URL}/emailConfirmation/${confirmationToken}`;
     const subject = "Edusign | Activez votre compte";
-  const htmlContent = `
+    const htmlContent = `
     <h1 style="text-align:center;color:#141414;">Merci de l'intérêt que vous portez à Edusign !</h1>
     <h2 style="text-align:center;color:#141414;">Nous sommes plus que ravis de voir que vous souhaitez rejoindre notre plateforme.</h2><br/><br/>
     <p style="text-align:justify;color:#141414;">Votre compte a bien été créé, cependant, pour l'activer, nous vous prions de bien vouloir confirmer votre email. Pour ce faire, il vous suffit de cliquer sur le lien ci-dessous :</p>
@@ -39,10 +33,8 @@ exports.register = async (req, res) => {
   `;
     sendConfirmationEmail(user.email, subject, htmlContent);
 
-    // Réponse de l'API indiquant que la création du nouvel utilisateur a eu lieu avec l'utilisateur en question
     res.status(201).json(user);
   } catch (err) {
-    // Réponse de l'API indiquant que la création du nouvel utilisateur a échoué avec un message
     res.status(500).json({
       message:
         err.message ||
@@ -55,20 +47,18 @@ exports.confirmEmail = async (req, res) => {
   try {
     const { token } = req.params;
 
-    // Trouver l'utilisateur avec le token de confirmation
     const user = await User.findOne({ confirmationToken: token });
 
     if (!user) {
       return res.status(404).json({ message: "Invalid or expired token" });
     }
 
-    // Mettre à jour l'état de confirmation de l'email
     user.emailConfirmed = true;
-    user.confirmationToken = undefined; // supprimer le token après validation
+    user.confirmationToken = undefined;
     await user.save();
 
     const subject = "Edusign | Compte activé";
-  const htmlContent = `
+    const htmlContent = `
     <h1 style="text-align:center;color:#141414;">C'est officiel, vous êtes un membre de la plateforme Edusign !</h1>
     <h2 style="text-align:center;color:#141414;">Maintenant que votre compte est activé, vous pouvez bénéficier de tout ce que l'application a à vous offrir.</h2><br/><br/>
     <p style="text-align:justify;color:#141414;">Pour vous connecter et découvrir tout notre contenu, vous n'avez qu'à cliquer juste en dessous ! </p>
@@ -78,10 +68,13 @@ exports.confirmEmail = async (req, res) => {
   `;
     sendConfirmationEmail(user.email, subject, htmlContent);
 
-    res.status(200).json({ message: {
-      title: 'Email confirmé !',
-      content: 'Votre compte a été activé et vous pouvez à présent vous connecter.'
-    }});
+    res.status(200).json({
+      message: {
+        title: "Email confirmé !",
+        content:
+          "Votre compte a été activé et vous pouvez à présent vous connecter.",
+      },
+    });
   } catch (err) {
     res.status(500).json({ message: "Error during email confirmation." });
   }
@@ -95,12 +88,10 @@ exports.login = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     if (!user.emailConfirmed) {
-      return res
-        .status(403)
-        .json({
-          message:
-            "Please confirm your email before logging in. We've sent an email to the email adress associated with your account.",
-        });
+      return res.status(403).json({
+        message:
+          "Please confirm your email before logging in. We've sent an email to the email adress associated with your account.",
+      });
     }
     const matchingPassword = await bcrypt.compare(password, user.password);
     if (!matchingPassword) {
@@ -130,52 +121,14 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.update = async (req, res) => {
+exports.getUserInfoFromToken = (req, res) => {
   try {
-    const userCheck = await User.findById(req.params.id);
-
-    if (!userCheck) {
-      return res.status(404).json({ message: "User not found." });
-    }
-
-    if (userCheck.id !== req.auth.userId && req.auth.userRole !== "admin") {
-      return res
-        .status(403)
-        .json({ message: "You are not authorized to update this user." });
-    }
-
-    const {
-      username,
-      email,
-      password,
-      skills,
-      lastConnected,
-      appliedOffers,
-      savedOffers,
-      offersHistory,
-    } = req.body;
-    const user = await User.findOneAndUpdate(
-      {
-        _id: req.params.id,
-      },
-      {
-        username,
-        email,
-        password,
-        skills,
-        lastConnected,
-        appliedOffers,
-        savedOffers,
-        offersHistory,
-      },
-      { returnDocument: "after" }
-    );
-    res.status(200).json(user);
+    const { userId, userRole } = req.auth;
+    res.status(200).json({ userId, userRole });
   } catch (err) {
     res.status(500).json({
       message:
-        err.message ||
-        "Something wrong happened with your request to update your user.",
+        err.message || "An error accured while retreiving the user's data.",
     });
   }
 };
@@ -268,96 +221,6 @@ exports.applyOffer = async (req, res) => {
       message:
         err.message ||
         "Something wrong happened with your request to update your user.",
-    });
-  }
-};
-
-exports.removeOfferByIds = async (req, res) => {
-  const userIds = req.query.ids ? req.query.ids.split(',') : [];
-  const offerId = req.body.offerId
-
-  if (req.auth.userRole !== "admin") {
-    return res
-      .status(403)
-      .json({ message: "You are not authorized to update the users." });
-  }
-
-  if (userIds.length === 0) {
-    return res.status(400).json({ message: "Aucun ID utilisateur fourni." });
-  }
-
-  try {
-    await User.updateMany(
-      { _id: { $in: userIds } },
-      {
-        $pull: {
-          appliedOffers: offerId,
-          savedOffers: offerId,
-          offersHistory: offerId,
-        },
-      }
-    );
-
-    res.status(200).json({
-      message: "Les utilisateurs ont été mis à jour avec succès.",
-    });
-  } catch (err) {
-    res.status(500).json({
-      message: err.message || "Une erreur s'est produite lors de la mise à jour des utilisateurs.",
-    });
-  }
-};
-
-exports.delete = async (req, res) => {
-  try {
-    const userCheck = await User.findById(req.params.id);
-    if (!userCheck) {
-      return res.status(404).json({
-        message: "Didn't find the user you were looking for.",
-      });
-    }
-
-    if (userCheck.id !== req.auth.userId && req.auth.userRole !== "admin") {
-      return res.status(403).json({
-        message: "You do not have permission to delete this user.",
-      });
-    }
-
-    await User.findByIdAndDelete(req.params.id);
-
-    res.status(200).json({
-      message: "The fellowing user has been deleted successfully.",
-      user: userCheck,
-    });
-  } catch (err) {
-    res.status(500).json({
-      message:
-        err.message ||
-        "Something wrong happened with your request to delete your user.",
-    });
-  }
-};
-
-exports.getUserInfoFromToken = (req, res) => {
-  try {
-    const { userId, userRole } = req.auth;
-    res.status(200).json({ userId, userRole });
-  } catch (err) {
-    res.status(500).json({
-      message:
-        err.message || "An error accured while retreiving the user's data.",
-    });
-  }
-};
-
-exports.getUserByUsername = async (req, res) => {
-  try {
-    const user = await User.findOne({ username: req.params.username });
-    res.status(200).json({ user });
-  } catch (err) {
-    res.status(500).json({
-      message:
-        err.message || "An error accured while retreiving the user's data.",
     });
   }
 };

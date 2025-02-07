@@ -23,29 +23,25 @@ module.exports = async (req, res, next) => {
     const path = req.path;
 
     if (path.startsWith("/api/offers")) {
-      if (req.method === "POST" || req.method === "DELETE") {
-       if (userRole !== "admin") {
-        return res.status(403).json({ error: "Only admins can create or delete offers." });
-       }
+      if (req.method === "POST") {
+        if (userRole !== "admin") {
+          return res
+            .status(403)
+            .json({ error: "Only admins can create offers." });
+        }
       } else if (req.method === "PUT") {
-        if (path.includes('/admin/')) {
-          if (userRole !== "admin") {
-            return res.status(403).json({ error: "Only admins can update everything about offers." });
-          }
-         } else if (userRole === "guest") {
-          return res.status(403).json({ error: "Only connected users can interact with offers." });
-         }
-      } else if (req.method === "GET") {
-        if (path.includes('/admin/')) {
-          if (userRole !== "admin") {
-            return res.status(403).json({ error: "Only admins can read everything about offers." });
-          }
-         }
+        if (userRole === "guest") {
+          return res
+            .status(403)
+            .json({ error: "Only connected users can interact with offers." });
+        }
       }
     }
-    
+
     next();
   } catch (err) {
-    res.status(401).json({ error: "Something went wrong while checking the user's role." });
+    res
+      .status(401)
+      .json({ error: "Something went wrong while checking the user's role." });
   }
 };
