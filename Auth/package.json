@@ -4,7 +4,7 @@
  "description": "",
  "main": "server.js",
  "scripts": {
-  "test": "jest --forceExit",
+  "test": "jest --config=../jest.config.js --forceExit",
   "dev": "nodemon server.js",
   "start": "nodemon --legacy-watch server.js"
  },
