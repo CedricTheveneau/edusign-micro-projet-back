@@ -26,9 +26,9 @@ jobs:
           git config --global user.name "CedricTheveneau"
           git config --global user.email "theveneaucedric@gmail.com"
 
-      - name: Run tests in Auth submodule
+      - name: Run tests in Auth micro-service
         run: |
-          cd ./back/Auth
+          cd ./Auth
           npm install
           npm run test -- --maxWorkers=2
         continue-on-error: false
